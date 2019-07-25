@@ -5,6 +5,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <style type="text/css">
 
 
@@ -30,9 +32,9 @@
                 <StaticHoverStyle Font-Bold="true" />
                 <StaticSelectedStyle BackColor="Black" />
                 <Items>
-                    <asp:MenuItem NavigateUrl="~/WebForm1.aspx" Text="Home" Value="Home"></asp:MenuItem>
-                    <asp:MenuItem NavigateUrl="~/category_list.aspx" Text="Category" Value="Category"></asp:MenuItem>
-                    <asp:MenuItem NavigateUrl="~/WebForm3.aspx" Text="Products" Value="Products"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/main_page.aspx" Text="Home" Value="Home"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/add_category.aspx" Text="Category" Value="Category"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/products_add.aspx" Text="Products" Value="Products"></asp:MenuItem>
                 </Items>
             </asp:Menu>
         </div>
@@ -46,30 +48,30 @@
             <br />
             <br />
             <br />
-            <asp:Label ID="Label2" runat="server" ForeColor="Black">Add Products</asp:Label>
+            <asp:Label ID="Label2" runat="server" ForeColor="Black" Font-Bold="True">Edit Products</asp:Label>
             <br />
             <br />
+            <asp:SqlDataSource ID="SqlDataSource2" runat="server" ConnectionString="<%$ ConnectionStrings:praveenConnectionString %>" SelectCommand="SELECT [category_name] FROM [category]"></asp:SqlDataSource>
             <br />
             <br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="Label3" runat="server" Text="Category Name"></asp:Label>
             &nbsp;
-            <asp:DropDownList ID="DropDownList1" runat="server" Height="27px"  Width="161px">
+            <asp:DropDownList ID="DropDownList1" runat="server" Height="27px"  Width="161px" DataSourceID="SqlDataSource2" DataTextField="category_name" DataValueField="category_name">
                 <asp:ListItem></asp:ListItem>
             </asp:DropDownList>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-            <asp:Label ID="Label5" runat="server" Text=" Product name"></asp:Label>
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<asp:Label ID="Label5" runat="server" Text=" Product name"></asp:Label>
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <asp:TextBox ID="TextBox3" runat="server"></asp:TextBox>
             <br />
             <br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <asp:Label ID="Label4" runat="server" Text="Product ID"></asp:Label>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <asp:TextBox ID="TextBox2" runat="server"></asp:TextBox>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <asp:Label ID="Label9" runat="server" Text="Available Quantity"></asp:Label>
             &nbsp;
-            <asp:ListBox ID="ListBox1" runat="server" Height="23px" Width="55px">
+            <asp:ListBox ID="ListBox1" runat="server" Height="23px" Width="45px">
                 <asp:ListItem>1</asp:ListItem>
                 <asp:ListItem>2</asp:ListItem>
                 <asp:ListItem>3</asp:ListItem>
@@ -82,7 +84,7 @@
             <br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <asp:Label ID="Label10" runat="server" Text="Sales Price"></asp:Label>
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             <asp:TextBox ID="TextBox5" runat="server"></asp:TextBox>
             <br />
             <br />
@@ -93,89 +95,64 @@
             <asp:Button ID="Button2" runat="server" Height="38px" OnClick="Button2_Click" Text="Cancel" Width="103px" />
             <br />
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <asp:SqlDataSource ID="SqlDataSource1" runat="server"></asp:SqlDataSource>
             <br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             
             
                     
-            <asp:GridView ID="GridView1" runat="server" Width="450px" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="3" AutoGenerateColumns="False" OnSelectedIndexChanged="GridView1_SelectedIndexChanged">
+            <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConflictDetection="CompareAllValues" ConnectionString="<%$ ConnectionStrings:praveenConnectionString %>" DeleteCommand="DELETE FROM [products] WHERE [product_id] = @original_product_id AND [category_name] = @original_category_name AND [product_name] = @original_product_name AND [sales_price] = @original_sales_price AND [available_quantity] = @original_available_quantity" InsertCommand="INSERT INTO [products] ([category_name], [product_id], [product_name], [sales_price], [available_quantity]) VALUES (@category_name, @product_id, @product_name, @sales_price, @available_quantity)" OldValuesParameterFormatString="original_{0}" SelectCommand="SELECT * FROM [products]" UpdateCommand="UPDATE [products] SET [category_name] = @category_name, [product_name] = @product_name, [sales_price] = @sales_price, [available_quantity] = @available_quantity WHERE [product_id] = @original_product_id AND [category_name] = @original_category_name AND [product_name] = @original_product_name AND [sales_price] = @original_sales_price AND [available_quantity] = @original_available_quantity">
+                <DeleteParameters>
+                    <asp:Parameter Name="original_product_id" Type="String" />
+                    <asp:Parameter Name="original_category_name" Type="String" />
+                    <asp:Parameter Name="original_product_name" Type="String" />
+                    <asp:Parameter Name="original_sales_price" Type="String" />
+                    <asp:Parameter Name="original_available_quantity" Type="String" />
+                </DeleteParameters>
+                <InsertParameters>
+                    <asp:Parameter Name="category_name" Type="String" />
+                    <asp:Parameter Name="product_id" Type="String" />
+                    <asp:Parameter Name="product_name" Type="String" />
+                    <asp:Parameter Name="sales_price" Type="String" />
+                    <asp:Parameter Name="available_quantity" Type="String" />
+                </InsertParameters>
+                <UpdateParameters>
+                    <asp:Parameter Name="category_name" Type="String" />
+                    <asp:Parameter Name="product_name" Type="String" />
+                    <asp:Parameter Name="sales_price" Type="String" />
+                    <asp:Parameter Name="available_quantity" Type="String" />
+                    <asp:Parameter Name="original_product_id" Type="String" />
+                    <asp:Parameter Name="original_category_name" Type="String" />
+                    <asp:Parameter Name="original_product_name" Type="String" />
+                    <asp:Parameter Name="original_sales_price" Type="String" />
+                    <asp:Parameter Name="original_available_quantity" Type="String" />
+                </UpdateParameters>
+            </asp:SqlDataSource>
+            <br />
+            
+            
+                    
+            <asp:GridView ID="GridView1" runat="server" Width="450px" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="3" AutoGenerateColumns="False" DataKeyNames="product_id"  DataSourceID="SqlDataSource1">
                 <Columns>
-                     <asp:TemplateField HeaderText="Product ID" ItemStyle-Width="150">
-                    <ItemTemplate>
-                        <asp:Label ID="label7" runat="server" Text='<%# Eval("product_id") %>'></asp:Label>
-                        
-                    </ItemTemplate>
-                    
-<ItemStyle Width="150px"></ItemStyle>
-                    
-                </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Category Name" ItemStyle-Width="150">
-                    <ItemTemplate>
-                        <asp:Label ID="label8" runat="server" Text='<%# Eval("category_name") %>'></asp:Label>
-                        
-                    </ItemTemplate>
-
-
-                    
-<ItemStyle Width="150px"></ItemStyle>
-
-                         </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Product Name" ItemStyle-Width="150">
-                    <ItemTemplate>
-                        <asp:Label ID="label6" runat="server" Text='<%# Eval("product_name") %>'></asp:Label>
-                        
-                    </ItemTemplate>
-
-
-  <ItemStyle Width="150px"></ItemStyle>
-
-                         </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Sales Price" ItemStyle-Width="150">
-                    <ItemTemplate>
-                        <asp:Label ID="label11" runat="server" Text='<%# Eval("sales_price") %>'></asp:Label>
-                        
-                    </ItemTemplate>
-
-<ItemStyle Width="150px"></ItemStyle>
-                    
- </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Available Quantity" ItemStyle-Width="150">
-                    <ItemTemplate>
-                        <asp:Label ID="label12" runat="server" Text='<%# Eval("available_quantity") %>'></asp:Label>
-                        
-                    </ItemTemplate>
-                        
-
-
-                    
-<ItemStyle Width="150px"></ItemStyle>
-
-
-
-                    
-                </asp:TemplateField>
-
-                <asp:TemplateField HeaderText="Edit" ItemStyle-Width="150">
-
-                    <ItemTemplate>
-                        <asp:ImageButton ID="ImageButton1" Width="50px" runat="server" ImageUrl="~/Drawables/edit icon.png" PostBackUrl="~/products_.aspx"></asp:ImageButton>
-                    </ItemTemplate>
-
-<ItemStyle Width="150px"></ItemStyle>
+                    <asp:BoundField DataField="category_name" HeaderText="category_name" SortExpression="category_name" />
+                    <asp:BoundField DataField="product_id" HeaderText="product_id" ReadOnly="True" SortExpression="product_id" />
+                    <asp:BoundField DataField="product_name" HeaderText="product_name" SortExpression="product_name" />
+                    <asp:BoundField DataField="sales_price" HeaderText="sales_price" SortExpression="sales_price" />
+                    <asp:BoundField DataField="available_quantity" HeaderText="available_quantity" SortExpression="available_quantity" />
+                     <asp:TemplateField HeaderText="Edit" ShowHeader="False">
+                        <EditItemTemplate>
+                            <asp:ImageButton ID="ImageButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Update" />
+                            &nbsp;<asp:ImageButton ID="ImageButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" />
+                        </EditItemTemplate>
+                        <ItemTemplate>
+                            <asp:ImageButton ID="ImageButton3" runat="server" CausesValidation="False" CommandName="Edit" ImageUrl="~/Drawables/edit icon.png" PostBackUrl="products_edit.aspx" Text="" />
+                        </ItemTemplate>
+                        <ControlStyle Height="25px" Width="25px" />
                     </asp:TemplateField>
+                    <asp:CommandField ButtonType="Image" DeleteImageUrl="~/Drawables/delete icon.png" HeaderText="Delete" ShowDeleteButton="True">
+                    <ControlStyle Height="25px" Width="25px" />
+                    </asp:CommandField>
 
-                    
-
-               <asp:TemplateField HeaderText="Delete" ItemStyle-Width="150">
-                    <ItemTemplate>
-                        <asp:ImageButton ID="ImageButton2" Width="40px" runat="server" ImageUrl="~/Drawables/delete icon.png" ></asp:ImageButton>
-                    </ItemTemplate>
-
-<ItemStyle Width="150px"></ItemStyle>
-               </asp:TemplateField>
-                
-            </Columns>
+                </Columns>
                 <FooterStyle BackColor="White" ForeColor="#000066" />
                 <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />
                 <PagerStyle BackColor="White" ForeColor="#000066" HorizontalAlign="Left" />

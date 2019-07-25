@@ -20,6 +20,10 @@ namespace Captcha
 
         protected void Page_Load(object sender, EventArgs e)
         {
+           // if (Session["Username"] == null)
+            //{
+               // Response.Redirect("WebForm2.aspx");
+            //} 
             string myquery = "select * from [dbo].[category]";
             SqlConnection con = new SqlConnection(cnstring);
             SqlCommand cmd = new SqlCommand();
@@ -33,11 +37,7 @@ namespace Captcha
 
 
 
-
-
-
-            da.Fill(ds);
-            GridView1.DataSource = ds;
+                              da.Fill(ds);
             GridView1.DataBind();
 
         }
@@ -66,15 +66,17 @@ namespace Captcha
 
                 DataSet ds = new DataSet();//it is kind of a box,use for single database tabales
                 da.Fill(ds);
-                GridView1.DataSource = ds;
+
                 GridView1.DataBind();
-                con.Close();
+                
             }
 
         }
 
         protected void LinkButton1_Click(object sender, EventArgs e)
         {
+            //Session["Username"] = null;
+            //Session["Password"] = null;
             Response.Redirect("WebForm2.aspx");
         }
 
@@ -85,6 +87,12 @@ namespace Captcha
             TextBox3.Text = "";
             Response.Redirect("add_category.aspx");
 
+        }
+
+       
+        protected void ImageButton1_Click1(object sender, ImageClickEventArgs e)
+        {
+            Response.Redirect("edit_category.aspx");
         }
     }
 }

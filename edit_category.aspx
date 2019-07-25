@@ -5,6 +5,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <style type="text/css">
 
 .MenuStyle {
@@ -29,9 +31,9 @@
                 <StaticHoverStyle Font-Bold="true" />
                 <StaticSelectedStyle BackColor="Black" />
                 <Items>
-                    <asp:MenuItem NavigateUrl="~/WebForm1.aspx" Text="Home" Value="Home"></asp:MenuItem>
-                    <asp:MenuItem NavigateUrl="~/category_list.aspx" Text="Category" Value="Category"></asp:MenuItem>
-                    <asp:MenuItem NavigateUrl="~/WebForm3.aspx" Text="Products" Value="Products"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/main_page.aspx" Text="Home" Value="Home"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/add_category.aspx" Text="Category" Value="Category"></asp:MenuItem>
+                    <asp:MenuItem NavigateUrl="~/products_add.aspx" Text="Products" Value="Products"></asp:MenuItem>
                 </Items>
             </asp:Menu>
         </div>
@@ -72,67 +74,49 @@
             <asp:Button ID="Button2" runat="server" Height="40px" OnClick="Button2_Click" Text="Cancel" Width="97px" />
             <br />
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <asp:SqlDataSource ID="SqlDataSource1" runat="server"></asp:SqlDataSource>
+            <asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:praveenConnectionString %>" OldValuesParameterFormatString="original_{0}" SelectCommand="SELECT * FROM [category]" ConflictDetection="CompareAllValues" DeleteCommand="DELETE FROM [category] WHERE [category_Id] = @original_category_Id AND [category_name] = @original_category_name AND [numberof_products] = @original_numberof_products" InsertCommand="INSERT INTO [category] ([category_Id], [category_name], [numberof_products]) VALUES (@category_Id, @category_name, @numberof_products)" UpdateCommand="UPDATE [category] SET [category_name] = @category_name, [numberof_products] = @numberof_products WHERE [category_Id] = @original_category_Id AND [category_name] = @original_category_name AND [numberof_products] = @original_numberof_products">
+                <DeleteParameters>
+                    <asp:Parameter Name="original_category_Id" Type="String" />
+                    <asp:Parameter Name="original_category_name" Type="String" />
+                    <asp:Parameter Name="original_numberof_products" Type="String" />
+                </DeleteParameters>
+                <InsertParameters>
+                    <asp:Parameter Name="category_Id" Type="String" />
+                    <asp:Parameter Name="category_name" Type="String" />
+                    <asp:Parameter Name="numberof_products" Type="String" />
+                </InsertParameters>
+                <UpdateParameters>
+                    <asp:Parameter Name="category_name" Type="String" />
+                    <asp:Parameter Name="numberof_products" Type="String" />
+                    <asp:Parameter Name="original_category_Id" Type="String" />
+                    <asp:Parameter Name="original_category_name" Type="String" />
+                    <asp:Parameter Name="original_numberof_products" Type="String" />
+                </UpdateParameters>
+            </asp:SqlDataSource>
             <br />
             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
             
             
                     
-            <asp:GridView ID="GridView1" runat="server" Width="450px" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="3" AutoGenerateColumns="False">
-                
+            <asp:GridView ID="GridView1" runat="server" AutoGenerateColumns="False" BackColor="White" BorderColor="#CCCCCC" BorderStyle="None" BorderWidth="1px" CellPadding="3" DataKeyNames="category_Id" DataSourceID="SqlDataSource1">
                 <Columns>
-                     <asp:TemplateField HeaderText="Category ID" ItemStyle-Width="150">
-                    <ItemTemplate>
-                        <asp:Label ID="label6" runat="server" Text='<%# Eval("category_id") %>'></asp:Label>
-                        
-                    </ItemTemplate>
-                    
-<ItemStyle Width="150px"></ItemStyle>
-                    
-                </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Category Name" ItemStyle-Width="150">
-                    <ItemTemplate>
-                        <asp:Label ID="label7" runat="server" Text='<%# Eval("category_name") %>'></asp:Label>
-                        
-                    </ItemTemplate>
-
-
-                    
-<ItemStyle Width="150px"></ItemStyle>
-
-                         </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Number of Products" ItemStyle-Width="150">
-                    <ItemTemplate>
-                        <asp:Label ID="label8" runat="server" Text='<%# Eval("numberof_products") %>'></asp:Label>
-                        
-                    </ItemTemplate>
-
-
-                    
-<ItemStyle Width="150px"></ItemStyle>
-                    
-                </asp:TemplateField>
-
-                <asp:TemplateField HeaderText="Edit" ItemStyle-Width="150">
-
-                    <ItemTemplate>
-                        <asp:ImageButton ID="ImageButton1" Width="50px" runat="server" ImageUrl="~/Drawables/edit icon.png" PostBackUrl="~/category_edit.aspx"></asp:ImageButton>
-                    </ItemTemplate>
-
-<ItemStyle Width="150px"></ItemStyle>
+                    <asp:BoundField DataField="category_Id" HeaderText="category_Id" ReadOnly="True" SortExpression="category_Id" />
+                    <asp:BoundField DataField="category_name" HeaderText="category_name" SortExpression="category_name" />
+                    <asp:BoundField DataField="numberof_products" HeaderText="numberof_products" SortExpression="numberof_products" />
+                    <asp:TemplateField HeaderText="Edit" ShowHeader="False">
+                        <EditItemTemplate>
+                            <asp:ImageButton ID="ImageButton1" runat="server" CausesValidation="True" CommandName="Update" Text="Update" />
+                            &nbsp;<asp:ImageButton ID="ImageButton2" runat="server" CausesValidation="False" CommandName="Cancel" Text="Cancel" />
+                        </EditItemTemplate>
+                        <ItemTemplate>
+                            <asp:ImageButton ID="ImageButton3" runat="server" CausesValidation="False" CommandName="Edit" ImageUrl="~/Drawables/edit icon.png" PostBackUrl="edit_category.aspx" Text="" />
+                        </ItemTemplate>
+                        <ControlStyle Height="25px" Width="25px" />
                     </asp:TemplateField>
-
-                    
-
-               <asp:TemplateField HeaderText="Delete" ItemStyle-Width="150">
-                    <ItemTemplate>
-                        <asp:ImageButton ID="ImageButton2" Width="40px" runat="server" ImageUrl="~/Drawables/delete icon.png" PostBackUrl="~/category_edit.aspx"></asp:ImageButton>
-                    </ItemTemplate>
-
-<ItemStyle Width="150px"></ItemStyle>
-               </asp:TemplateField>
-                
-            </Columns>
+                    <asp:CommandField ButtonType="Image" DeleteImageUrl="~/Drawables/delete icon.png" HeaderText="Delete" ShowDeleteButton="True">
+                    <ControlStyle Height="25px" Width="25px" />
+                    </asp:CommandField>
+                </Columns>
                 <FooterStyle BackColor="White" ForeColor="#000066" />
                 <HeaderStyle BackColor="#006699" Font-Bold="True" ForeColor="White" />
                 <PagerStyle BackColor="White" ForeColor="#000066" HorizontalAlign="Left" />
@@ -142,7 +126,7 @@
                 <SortedAscendingHeaderStyle BackColor="#007DBB" />
                 <SortedDescendingCellStyle BackColor="#CAC9C9" />
                 <SortedDescendingHeaderStyle BackColor="#00547E" />
-                </asp:GridView>
+            </asp:GridView>
 
               
                 
